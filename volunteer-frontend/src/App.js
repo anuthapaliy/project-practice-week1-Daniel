@@ -13,7 +13,7 @@ function App() {
 useEffect(() => {
 const fetchSessions= async () => {
   try {
-  const response = await fetch('http://localhost:8000/sessions');
+  const response = await fetch('https://project-practice-week1.onrender.com/sessions');
   if (response.ok) {
   const data = await response.json();
   setSessions(data);
