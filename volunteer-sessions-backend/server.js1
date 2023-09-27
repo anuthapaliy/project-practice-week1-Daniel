@@ -1,0 +1,146 @@
+const express = require("express");
+const app = express();
+const { Pool } = require("pg");
+const PORT = process.env.PORT || 3000;
+
+// database configuration
+const db = new Pool({
+    user: process.env.DB_USERNAME,
+    host: process.env.DB_HOST,
+    database: process.env.DB_DATABASE_NAME,
+    password: process.env.DB_PASSWORD,
+    port: process.env.DB_PORT,
+    ssl: true
+    })
+    
+    
+    db.connect(function (err){
+    // if (err) throw err;
+    console.log("Connected to the database");
+    });
+    
+
+
+
+
+
+// GET "/"
+// app.get("/", (req, res) => {
+// Delete this line after you've confirmed your server is running
+// res.send({ express: "Your Backend Service is Running" });
+// });
+// Get all sessions
+app.get("/sessions", async (request, response) => {
+    try {
+    const query = 'SELECT * From sessions';
+    
+    
+    const { rows } = await db.query(query);
+    response.json(rows);
+    } catch (error) {
+    console.error(error);
+    response.status(500).json({ error: 'An error occured while fetching sessions' });
+    }
+    });
+    
+    
+    // // Add a new session
+    app.post("/sessions", async (request, response) => {
+    try {
+    const { date, time, session_type, booked } = request.body;
+    
+    
+    const query = 'INSERT INTO sessions (date, time, session_type, Booked) VALUES ($1, $2, $3, $4)';
+    await db.query(query, [date, time, session_type, booked]);
+    
+    
+    response.status(201).json({ message: "Session added successfully" });
+    } catch (error) {
+    console.error(error);
+    response.status(500).json({ error: 'An error occured while adding a session' });
+    }
+    });
+    
+    
+    // Update an existing session by ID
+    app.put("/sessions/:id", async (request, response) => {
+    try {
+    const { date, time, session_type, Booked } = request.body;
+    const sessionId = request.params.id;
+    
+    
+    const query = 'UPDATE sessions SET date = $1, time = $2, session_type = $3, booked = $4 where id = $5';
+    await db.query(query, [date, time, session_type, Booked, sessionId]);
+    
+    
+    response.status(200).json({ message: "Session updated successfully" });
+    } catch (error) {
+    console.error(error);
+    response.status(500).json({ error: 'An error occured while updating a session.' });
+    }
+    });
+
+    // Delete a session by ID
+  app.delete("/sessions/:id", async (request, response) => {
+    try {
+      const videoId = request.params.id;
+
+      const query = 'Delete FROM sessions WHERE id = $1';
+      await db.query(query, [sessionId]);
+
+      response.status(200).json({ message: "session deleted successfully" });
+    } catch (error) {
+      console.error(error);
+      response.status(500).json({ error: 'An error occured while deleting a session.' });
+    }
+  });
+//   Route to claim a session
+app.post("/sessions/claim/:id", async (request, response) => {
+    try {
+        const sessionId = request.params.id;
+
+        // check if the session with the given ID exists and is available
+        const checkQuery = 'select * from sessions where id = $1 and booked = false';
+        const { rows } = await db.query(checkQuery, [sessionId]);
+
+        if (rows.length === 0) {
+            return response.status(404).json({ error: "session not available for claiming" });
+        }
+
+        // Update the session to mark it as booked by the volunteer
+
+        const updateQuery = 'Update session set booked = true where id = $1';
+        await db.query(updateQuery, [sessionId]);
+
+        response.json({ message: "Session claimed successfully" });
+    } catch (error) {
+        console.error(error);
+        response.status(500).json({ error: "An error occured while claiming the session" });
+      }
+    });
+    
+    
+    
+    
+    // Get a session by ID
+    app.get("/sessions/:id", async (request, response) => {
+    try {
+    const sessionId = request.params.id;
+    
+    
+    const query = 'SELECT * FROM sessions WHERE id = $1';
+    const { rows } = await db.query(query, [sessionId]);
+    
+    
+    if (rows.length === 0) {
+    response.
+    status(404).json({ message: "Session not available" });
+    } else {
+    response.status(200).json(rows[0]);
+    }
+    } catch (error) {
+    console.error(error);
+    response.status(500).json({ error: 'An error occured while fetching a session.' });
+    }
+    });
+    
