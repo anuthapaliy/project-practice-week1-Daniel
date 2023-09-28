@@ -29,9 +29,14 @@ function AvailableSessionList({ sessions }) {
                 {sessions.map((session) => (
                     <li key={session.id}>
                         {session.date} - {session.time}
-                        <button onClick={() => claimSession(session.id)} className="claim-button" disabled={claimedSessions.includes(session.id)}>
-                        {claimedSessions.includes(session.id) ? 'claimed' : 'claim'}
-                        </button>
+        <button
+    onClick={() => claimSession(session.id)}
+    className={`claim-button ${claimedSessions.includes(session.id) ? 'claimed' : ''}`}
+    disabled={claimedSessions.includes(session.id)}
+>
+    {claimedSessions.includes(session.id) ? 'claimed' : 'claim'}
+</button>
+
                     </li>  
                 ))}
             </ul>

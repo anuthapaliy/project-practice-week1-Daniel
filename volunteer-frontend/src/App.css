@@ -139,6 +139,9 @@ body {
 .claim-button:hover {
   background-color: orangered;
 }
+.claim-button.claimed {
+  background-color: red;
+}
 
 .App {
   text-align: center;
