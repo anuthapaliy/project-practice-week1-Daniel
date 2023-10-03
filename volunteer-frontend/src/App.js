@@ -11,6 +11,7 @@ function App() {
   const [sessions, setSessions] = useState([]);
 
 useEffect(() => {
+  
 const fetchSessions= async () => {
   try {
   const response = await fetch('https://project-practice-week1.onrender.com/sessions');
@@ -28,8 +29,11 @@ const fetchSessions= async () => {
   fetchSessions();
   
 }, []);
+
+
+
   
-console.log('sessions in App.js:', sessions);
+// console.log('sessions in App.js:', sessions);
   return (
     <div className="App">
        <h1>City Farm</h1>
@@ -59,7 +63,7 @@ console.log('sessions in App.js:', sessions);
       <h2>Volunteer Management System</h2>
      <VolunteerDashboard />
      </div>
-        <AvailableSessionList sessions={sessions} />
+        <AvailableSessionList sessions={sessions} setSessions={setSessions} />
      </main>
       
     </div>

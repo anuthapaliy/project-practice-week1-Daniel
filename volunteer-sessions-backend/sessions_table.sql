@@ -1,5 +1,6 @@
 -- create_sessions_table.sql
 
+
 CREATE TABLE sessions (
   
   id SERIAL PRIMARY KEY,

@@ -7,15 +7,7 @@ const PORT = process.env.PORT || 8000;
 const dotenv = require('dotenv');
 dotenv.config();
 const bodyParser = require('body-parser')
-// database configuration
-// const db = new Pool({
-//     user: process.env.DB_USERNAME,
-//     host: process.env.DB_HOST,
-//     database: process.env.DB_DATABASE_NAME,
-//     password: process.env.DB_PASSWORD,
-//     port: process.env.DB_PORT,
-//     ssl: true
-//     })
+
     
 const db = new Pool({
     connectionString: process.env.DB_URL,
@@ -97,7 +89,22 @@ app.post("/sessions/claim/:id", async (request, response) => {
           res.status(500).json({ error: 'An error occurred while fetching sessions' });
         }
       });
-      
+
+      // Update an existing session by ID
+    app.put("/sessions/:id", async (request, response) => {
+      try {
+      const { date, time, session_type, Booked } = request.body;
+      const sessionId = request.params.id;
+      const query = 'UPDATE sessions SET date = $1, time = $2, session_type = $3, booked = $4 where id = $5';
+    await db.query(query, [date, time, session_type, Booked, sessionId]);
+    
+    
+    response.status(200).json({ message: "Session updated successfully" });
+    } catch (error) {
+    console.error(error);
+    response.status(500).json({ error: 'An error occured while updating a session.' });
+    }
+  }); 
     
     app.listen(8000, () => {
         console.log('Server is running on port 8000');

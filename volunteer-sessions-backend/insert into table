@@ -1,0 +1,56 @@
+insert into volunteer (name, email, cancelled) values ('Daniel', 'daniel1@gmail.com', false), ('Rob', 'robert1@gmail.com, false), ('Shaan', 'shaan7@gmail.com', 'false'), ('Anne', 'anne22@gmail.com', false);
+
+INSERT INTO volunteer (id, name, email,phone_number,cancelled) VALUES
+('2', 'Barath2', 'barath2@gmail.com', '335556', 'false'),
+('3', 'Daniel1', 'daniel1@gmail.com', '123456', 'false'),
+('4', 'Robert1', 'robert1@gmail.com', '345678','false'),
+('5', 'Shaan7', 'shaan7@gmail.com', '789650','false'),
+('6', 'Anne22', 'anne22@gmail.com', '123456','false');
+
+
+
+INSERT INTO volunteer (id, name, email,cancelled) VALUES
+('3', 'Daniel1', 'daniel1@gmail.com', 'false'),
+('4', 'Robert1', 'robert1@gmail.com','false'),
+('5', 'Shaan7', 'shaan7@gmail.com', 'false'),
+('6', 'Anne22', 'anne22@gmail.com','false');
+
+ALTER TABLE volunteer
+ADD COLUMN "phone_number" VARCHAR(255);
+
+
+UPDATE volunteer
+SET "phone_number" = '123456'
+WHERE id = 1; -- Replace with the appropriate id
+
+UPDATE sessions
+SET "session_type" = 'evening'
+WHERE time = '3:00'
+  AND date BETWEEN '2023-09-24' AND '2023-09-28';
+
+-- Update sessions with time '9:00' to 'morning' for the specified date range
+UPDATE sessions
+SET session_type = 'morning'
+WHERE time = '9:00'
+  AND date BETWEEN '2023-09-24' AND '2023-09-28';
+
+
+
+UPDATE sessions
+SET session_type = 'evening'
+WHERE id = 9;
+
+
+For booking table-:INSERT INTO booking (volunteer_id, session_id)
+VALUES (1, 9);
+
+-- Insert bookings for the first six volunteers and sessions
+INSERT INTO booking (volunteer_id, session_id)
+VALUES
+  (1, 9), -- Volunteer 1 books Session 9
+  (2, 10), -- Volunteer 2 books Session 10
+  (3, 11), -- Volunteer 3 books Session 11
+  (4, 12), -- Volunteer 4 books Session 12
+  (5, 13), -- Volunteer 5 books Session 13
+  (6, 14); -- Volunteer 6 books Session 14
+
