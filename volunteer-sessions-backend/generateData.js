@@ -117,7 +117,51 @@ for (let i = 1; i<= volunteersNo; i++){
                 
                 });
 
-            
+            // c.Randomly allocate sessions to volunteers
+
+            async function getRandomVolunteerId(){
+                const query = "select volunteer_id from volunteer order by random() limit 1";
+                const result = await db.query(query);
+                return result.rows[0].volunteer_id;
+            }
+
+            async function getRandomSessionId() {
+                const query = "select session_id from sessions order by random() limit 1";
+                const result = await db.query(query);
+                return result.rows[0].session_id;
+            }
+
+            async function allocateSessionsToVolunteers() {
+                const totalAllocations = 1000;
+                for(let i = 0; i < totalAllocations; i++) {
+                    const volunteerId = await getRandomVolunteerId();
+                    const sessionId = await getRandomSessionId();
+
+                    const query = {
+                        text: "insert into booking (volunteer_id, session_id) values ($1, $2)",
+                        values: [volunteerId, sessionId],
+                    };
+                    
+                    console.log("SQL Query:", query.text);
+
+                    try {
+                        await db.query(query);
+                        console.log(`Allocated session ${sessionId} to volunteer ${volunteerId}`);
+                    } catch (error) {
+                        console.error(`Error allocating session to volunteer:`, error);
+                    }
+                  }
+                  }
+
+                //   call the function to allocate sessions to volunteers
+
+                allocateSessionsToVolunteers()
+                .then(() => {
+                    console.log("session allocation completed.");
+                })
+                .catch((error) => {
+                    console.error("Session allocation failed:", error);
+                })
   
   
   
